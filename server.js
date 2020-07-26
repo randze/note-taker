@@ -43,7 +43,7 @@ app.get('/api/notes', function(req, res) {
 app.post('/api/notes', function(req, res) {
     let newNote = req.body
     // create new note id
-    newNote.id = (noteList.length + 1)
+    newNote.id = Date.now()
     noteList.push(newNote)
     saveNotes()
 
