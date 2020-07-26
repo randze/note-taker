@@ -35,8 +35,29 @@ app.get('/notes', function(req, res) {
 // API calls
 // get all notes
 app.get('/api/notes', function(req, res) {
-    console.log('get notes')
+    // console.log('get notes')
     res.send( noteList )
+})
+
+// add note
+app.post('/api/notes', function(req, res) {
+    let newNote = req.body
+    // create new note id
+    newNote.id = (noteList.length + 1)
+    noteList.push(newNote)
+    saveNotes()
+
+    res.send( newNote )
+})
+
+// delete note
+app.delete( '/api/notes/:id', function( req, res ){
+    const num = req.params.id
+
+    noteList = noteList.filter( note=>note.id != num )
+    saveNotes()
+
+    res.send( { id: num, message: 'Note Removed', status: true } )
 })
 
 // app listener
