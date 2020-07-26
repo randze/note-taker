@@ -11,6 +11,18 @@ app.use(express.urlencoded({ extended: true }))
 // serve public folder
 app.use(express.static('public'))
 
+// load the Note list from file
+let noteList = parseNotes()
+
+// functions to read/write db.json note file
+function parseNotes() {
+    const noteList = JSON.parse( fs.readFileSync( './db/db.json', 'utf8') )
+    return noteList
+}
+function saveNotes() {
+    fs.writeFileSync( './db/db.json', JSON.stringify( noteList ) )
+}
+
 // page routers
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, './public/index.html'))
@@ -18,6 +30,13 @@ app.get('/', function(req, res) {
 
 app.get('/notes', function(req, res) {
     res.sendFile(path.join(__dirname, './public/notes.html'))
+})
+
+// API calls
+// get all notes
+app.get('/api/notes', function(req, res) {
+    console.log('get notes')
+    res.send( noteList )
 })
 
 // app listener
